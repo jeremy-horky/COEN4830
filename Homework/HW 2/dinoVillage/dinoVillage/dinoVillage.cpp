@@ -5,6 +5,7 @@
 
 	Resources:
 		Code adapted from parts 1 and 2 of this assignment
+		copying: https://www.khronos.org/opengl/wiki/Buffer_Object#Copying
 */
 
 #include <stdio.h>
@@ -22,6 +23,8 @@ const int screenHeight = 480;
 
 int xpos = 288;
 int ypos = 216;
+
+int[10][10] colors;
 
 void myInit(void) {
 	glClearColor(1.0, 1.0, 1.0, 1.0);
@@ -43,6 +46,10 @@ void setColor(int r) {
 	case 6: glColor3f(0.482f, 0.0f, 0.658f); break;
 	default: glColor3f(0.807f, 0.686f, 0.352f); break;
 	}
+}
+
+void populate() {
+
 }
 
 void drawHouse(int houseColor, int roofColor) {
@@ -113,6 +120,7 @@ void drawHouse(int houseColor, int roofColor) {
 }
 
 void drawPolyLineFile() {
+	glColor3f(0.0f, 0.0f, 0.0f);
 	fstream inStream;
 	inStream.open("..\\dino.dat", ios::in);
 	if (inStream.fail()) return;
@@ -138,6 +146,7 @@ void drawDino(void) {
 	drawPolyLineFile();
 	glFlush();
 	glEnd();
+	glutSwapBuffers();
 }
 
 void myKeyboard(unsigned char key, int x, int y) {
@@ -161,7 +170,7 @@ void drawVillage(void) {
 			drawHouse(rand1, rand2);
 		}
 	}
-	drawDino();
+	//drawDino();
 	glEnd();
 	glFlush();
 	glutSwapBuffers();
