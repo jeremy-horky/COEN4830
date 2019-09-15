@@ -20,7 +20,7 @@ using namespace std;
 const int screenWidth = 640;
 const int screenHeight = 480;
 
-int xpos = 288;
+int xpos = 288;	//holds position of dinosaur viewport, initialized to middle of screen
 int ypos = 216;
 
 void myInit(void) {
@@ -54,16 +54,16 @@ void drawPolyLineFile() {
 	glutSwapBuffers();
 }
 
-void drawDino(void) {
+void drawDino(void) {	//creates a viewport 1/10 scale of the window
 	glViewport(xpos, ypos, 64, 48);
 	drawPolyLineFile();
 	glFlush();
 	glEnd();
 }
 
-void myKeyboard(unsigned char key, int x, int y) {
+void myKeyboard(unsigned char key, int x, int y) {	//moves where viewport is depending on key pressed, then redraws the dino
 	switch (key) {
-	case 'w': ypos += 1; drawDino(); printf("W pressed \n (%d, %d) \n", xpos, ypos); break;
+	case 'w': ypos += 1; drawDino(); printf("W pressed \n (%d, %d) \n", xpos, ypos); break;	//print statement used for debugging
 	case 'a': xpos -= 1; drawDino(); printf("A pressed \n (%d, %d) \n", xpos, ypos); break;
 	case 's': ypos -= 1; drawDino(); printf("S pressed \n (%d, %d) \n", xpos, ypos); break;
 	case 'd': xpos += 1; drawDino(); printf("D pressed \n (%d, %d) \n", xpos, ypos); break;

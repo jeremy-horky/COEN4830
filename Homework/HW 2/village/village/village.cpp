@@ -22,6 +22,9 @@ using namespace std;
 const int screenWidth = 640;
 const int screenHeight = 480;
 
+float colors[10][10][2][3];	//holds colors of house body and roof for all houses
+int scale[10][10][2];		//holds scale of every house
+
 void myInit(void) {
 	glClearColor(1.0, 1.0, 1.0, 1.0);
 	glColor3f(0.0f, 0.0f, 0.0f);
@@ -31,53 +34,86 @@ void myInit(void) {
 	gluOrtho2D(0.0, (GLdouble)screenWidth, 0.0, (GLdouble)screenHeight);
 }
 
-void setColor(int r) {
+void setColor(int r, int i, int j, int flag) {	//uses random integers to choose house body and roof colors
 	switch (r) {
-	case 0: glColor3f(0.678f, 0.0f, 0.007f); break;
-	case 1: glColor3f(0.129f, 0.243f, 0.117f); break;
-	case 2: glColor3f(0.321f, 0.019f, 1.0f); break;
-	case 3: glColor3f(0.670f, 0.670f, 0.670f); break;
-	case 4: glColor3f(1.0f, 0.0f, 0.0f); break;
-	case 5: glColor3f(1.0f, 0.517f, 0.019f); break;
-	case 6: glColor3f(0.482f, 0.0f, 0.658f); break;
-	default: glColor3f(0.807f, 0.686f, 0.352f); break;
+	case 0: 
+		colors[i][j][flag][0] = 0.678;
+		colors[i][j][flag][1] = 0.0;
+		colors[i][j][flag][2] = 0.007;
+		break;
+	case 1:
+		colors[i][j][flag][0] = 0.129;
+		colors[i][j][flag][1] = 0.243;
+		colors[i][j][flag][2] = 0.117;
+		break;
+	case 2: 
+		colors[i][j][flag][0] = 0.321;
+		colors[i][j][flag][1] = 0.019;
+		colors[i][j][flag][2] = 1.0;
+		break;
+	case 3: 
+		colors[i][j][flag][0] = 0.670;
+		colors[i][j][flag][1] = 0.670;
+		colors[i][j][flag][2] = 0.670;
+		break;
+	case 4:
+		colors[i][j][flag][0] = 1.0;
+		colors[i][j][flag][1] = 0.0;
+		colors[i][j][flag][2] = 0.0;
+		break;
+	case 5:
+		colors[i][j][flag][0] = 1.0;
+		colors[i][j][flag][1] = 0.517;
+		colors[i][j][flag][2] = 0.019;
+		break;
+	case 6:
+		colors[i][j][flag][0] = 0.482;
+		colors[i][j][flag][1] = 0.0;
+		colors[i][j][flag][2] = 0.658;
+		break;
+	default:
+		colors[i][j][flag][0] = 0.807;
+		colors[i][j][flag][1] = 0.686;
+		colors[i][j][flag][2] = 0.352;
+		break;
 	}
 }
 
-void drawHouse(int houseColor, int roofColor){
-	int c1 = 75;
+void drawHouse(int i, int j){	//draws house
+	int c1 = 132 + 75;
 	int c2 = 275;
-	int c3 = 325;
+	int c3 = 132 + 375;
+	int c4 = 75;
 
-	int x1 = 25;
+	int x1 = 132 + 25;
 	int y1 = 275;
-	int x2 = 375;
+	int x2 = 132 + 425;
 	int y2 = 275;
-	int x3 = 200;
+	int x3 = 132 + 225;
 	int y3 = 400;
 
 	int d1 = 75;
 	int d2 = 225;
-	int d3 = 175;
-	int d4 = 225;
+	int d3 = 132 + 200;
+	int d4 = 132 + 250;
 
-	int w1 = 125;
+	int w1 = 150;
 	int w2 = 225;
-	int w3 = 100;
-	int w4 = 150;
-	int w5 = 250;
-	int w6 = 300;
+	int w3 = 132 + 125;
+	int w4 = 132 + 175;
+	int w5 = 132 + 275;
+	int w6 = 132 + 325;
 
-	setColor(houseColor);
+	glColor3f(colors[i][j][0][0], colors[i][j][0][1], colors[i][j][0][2]);
 	glBegin(GL_POLYGON);
-	glVertex2i(c1, c1);
+	glVertex2i(c1, c4);
 	glVertex2i(c1, c2);
 	glVertex2i(c3, c2);
-	glVertex2i(c3, c1);
+	glVertex2i(c3, c4);
 	glEnd();
 	glFlush();
 
-	setColor(roofColor);
+	glColor3f(colors[i][j][1][0], colors[i][j][1][1], colors[i][j][1][2]);
 	glBegin(GL_TRIANGLES);
 	glVertex2i(x1, y1);
 	glVertex2i(x2, y2);
@@ -111,14 +147,21 @@ void drawHouse(int houseColor, int roofColor){
 	glFlush();
 }
 
-void drawVillage(void){
+void drawVillage(void){	//draws a 10x10 village of houses
 	glClear(GL_COLOR_BUFFER_BIT);
 	for (int i = 0; i < 10; i++) {
+		int iSum = 0;
 		for (int j = 0; j < 10; j++) {
 			int rand1 = (std::rand() % (7 + 1));
 			int rand2 = (std::rand() % (7 + 1));
-			glViewport(i * 64, j * 48, 64, 48);
-			drawHouse(rand1, rand2);
+			int scale1 = 16 + (std::rand() % (64 - 16 + 1));
+			int scale2 = 16 + (std::rand() % (48 - 16 + 1));
+			setColor(rand1, i, j, 0);
+			setColor(rand2, i, j, 1);
+			scale[i][j][0] = scale1;
+			scale[i][j][1] = scale2;
+			glViewport(i * 64, j * 48, scale1, scale2);
+			drawHouse(i, j);
 		}
 	}
 	glEnd();
